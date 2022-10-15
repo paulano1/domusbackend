@@ -19,13 +19,10 @@ app = FastAPI()
 
 
 categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
-def run():
-    news = newScrapper(categories=categories)
-    news.jsonDump()
+
 
 @app.get("/get/news")
 def hello():
-    run()
     with open('news.json') as json_file:
         data = json.load(json_file)
     
