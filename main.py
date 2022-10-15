@@ -45,6 +45,12 @@ def getStoriesposts():
     data = json.load(f)
     return {"stories" : data["shortStories"]}
 
+@app.get('/get/crossword',status_code=200)
+def getStoriesposts():
+    f = open('legend.json')
+    data = json.load(f)
+    return data
+
 @app.get('/get/top100',status_code=200)
 def getTop100(): 
     URL = "https://www.billboard.com/charts/hot-100/"
