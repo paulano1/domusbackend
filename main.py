@@ -9,14 +9,11 @@ import math
 import requests
 import newspaper
 import json
-from words import wordlist
 from bs4 import BeautifulSoup
 key = os.environ.get('API')
+from predictive import Predictive
 
 app = FastAPI()
-
-
-
 
 @app.get("/")
 def hello():
@@ -33,6 +30,22 @@ def get_posts():
     f = open('legend.json')
     data = json.load(f)
     return (data)
+
+@app.get('/get/predictiveNews',status_code=200)
+def get_posts():
+    news = Predictive()
+    return (news.getPredictiveNews())
+
+@app.get('/get/Jokes',status_code=200)
+def get_posts():
+    news = Predictive()
+    return (news.getJokes())
+
+@app.get('/get/shortStories',status_code=200)
+def get_posts():
+    news = Predictive()
+    return (news.getShortStory())
+
 @app.get('/get/top100',status_code=200)
 def getTop100(): 
     URL = "https://www.billboard.com/charts/hot-100/"
@@ -49,8 +62,14 @@ def getTop100():
         }
         songs.append(json)
     return songs
-@app.post('/post/properNouns', status_code = status.HTTP_201_CREATED )
+
+
+
+
+
+@app.post('/prob', status_code = status.HTTP_201_CREATED )
 def create_posts(new :  dict):
-    abc  = wordlist()
-    return {"proper": abc.ProperNounExtractor(new['text'])}
     
+    return {
+        "probability" : new)
+    }

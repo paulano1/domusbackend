@@ -32,7 +32,7 @@ class wordlist():
         for i in query:
             self.__words.append(i[0])
         return self.__words
-    def generateWordList(self):
+    def generateWordList(self, flag = 0, count = 40):
         with open('news.json') as json_file:
             data = json.load(json_file)
             
@@ -43,8 +43,11 @@ class wordlist():
         
         split_it = self.ProperNounExtractor(text)
         Counters_found = Counter(split_it)
-        most_occur = Counters_found.most_common(40)
+        most_occur = Counters_found.most_common(count)
         self.getList(most_occur)
+        if (flag !=  0):
+            return self.__words
+      
     def getClues(self):
         for word in self.__words:
             resp = requests.get("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)

@@ -1,5 +1,6 @@
 
 from ast import If
+from cmath import sin
 from time import sleep
 from turtle import update
 from unicodedata import category
@@ -14,7 +15,7 @@ class newScrapper():
     def __init__(self, categories) -> None:
         self.__categories = categories
         self.__url = []
-        self.__key = "98add815e391464f94bed65d6d98dea7"
+        self.__key = "042eab05ea5d41f0aac781d14b70b0f9"
         self.__responses = {
 
             "status": "ok",
@@ -31,11 +32,16 @@ class newScrapper():
         url_i = newspaper.Article(url="%s" % (url), language='en')
         url_i.download()
         url_i.parse()
+        print("here")
         return url_i.text
     ##fix
     def parser(self, response):
-        #print(response)
-        return [response["articles"][0],response["articles"][1], response["articles"][2], response["articles"][3]]
+        
+        #print("here")
+        res = []
+        for temp in response["articles"]:
+            res.append(temp)
+        return res
 
     def titleStorer(self):
         pass
@@ -45,7 +51,7 @@ class newScrapper():
         for article in articles:
             url = article["url"]
             url_i = newspaper.Article(url="%s" % (url), language='en')
-            
+            #print("here")
             try:
                 url_i.download()
                 url_i.parse()
@@ -57,6 +63,7 @@ class newScrapper():
             #sleep(10)
                 temp = {
                     "source" : article["source"]["name"],
+                    "title" : url_i.title,
                     "url" : article["url"],
                     "img" : article["urlToImage"],
                     "time" : article["publishedAt"],
@@ -75,8 +82,13 @@ class newScrapper():
             response = requests.get(link + category + rest + self.__key)
             
             r = self.parser(response.json())
-            self.__responses["articles"].append(r[0])
-            self.__responses["articles"].append(r[1])
+            for i in range(5):
+                try: 
+                    self.__responses["articles"].append(r[i])
+                except:
+                    pass
+            
+    
             
         self.___updateContent()
         return 1
@@ -102,8 +114,7 @@ class shortstories():
         pass
 
 
-
-categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
+categories = ["environment", "climate+change", "greenhouse","technology", "Politcs", "electric+vehicles" ]
 
 news = newScrapper(categories=categories)
 news.getGeneralNews()

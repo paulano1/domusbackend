@@ -384,12 +384,12 @@ class generator():
         
 
 
-
+        '''
         categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
 
         news = newScrapper(categories=categories)
         news.getGeneralNews()
-        news.jsonDump()
+        news.jsonDump()'''
         with open("legend.json", "w") as fp:
             json.dump(a.getData(),fp)
         return a.getData()
