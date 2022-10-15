@@ -88,6 +88,12 @@ def get_posts():
     f = open('news.json')
     data = json.load(f)
     return (data)
+    
+@app.get('/get/crossword',status_code=200)
+def get_posts():
+    f = open('legend.json')
+    data = json.load(f)
+    return (data)
 
 
 @app.post('/prob', status_code = status.HTTP_201_CREATED )
