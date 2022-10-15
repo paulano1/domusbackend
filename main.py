@@ -83,7 +83,7 @@ def newsparser():
 def hello():
     return {"message":"its running"}
 
-@app.get('/news',status_code=200)
+@app.get('/get/news',status_code=200)
 def get_posts():
     f = open('news.json')
     data = json.load(f)
