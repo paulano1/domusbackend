@@ -10,89 +10,54 @@ import requests
 import newspaper
 import json
 key = os.environ.get('API')
+from bs4 import BeautifulSoup
 
 app = FastAPI()
 
 
-def par(a):
-    n = {}
-    for i in a.keys():
-        t = a[str(i)]
-        if t['inputType'] == 'input-radio':
-            if t['value'] == '18-26': 
-                n['1'] = 1
-            elif t['value'] == 'NO':
-                n[str(i)] = 0
-            elif t['value'] == 'YES':
-                n[str(i)] = 1
-        elif t['inputType'] == 'input-text':
-            n[str(i)] = t['value']
 
-    return n  
-def prob(temp):
-    coef = {
-    '1' : 0.79,
-    '2' : 0.14,
-    '3' : 0.37,
-    '4' : 0.4,
-    '5' : 0.26,
-    '6' : 0.15,
-    '7' : 0.25,
-    '8' : 0.40,
-    '9' : 0.14,
-    '10' : 0.56,
-    '11' : 0.09,
-    '12' : 0.10,
-    '13' : 0.17,
-    '14' : 0.15,
-    '15' : 0.18,
-    '16' : 0.17,
-    '17' : 0.19,
-    '18' : 0.20,
-    '19' : -0.01
-}
-    inp = par(temp)
-    
-    sub = 0
-    for i in inp.keys():
-        co = float(coef[i])
-        dig = float(inp[i])
-        
-        sub = sub + (co * dig)
-    total = math.e**(11.5 - (sub))
-    return round(((total/(1-total))*1000),0)
-    
 
-def newsparser():
-    dflt = "https://newsapi.org/v2/everything?q=health+happy&apiKey="
-    link = dflt + key
-    response = requests.get(link)
-    news = {}
-    a = response.json()
-    for i in range(0,10):
-        ind = {
-            'source': a["articles"][i]['url'],
-            'url' : a["articles"][i]['url'],
-            'img' : a["articles"][i]['urlToImage'],
-            'summary' : a["articles"][i]['content']
-        }
-        news[i] = ind
-    return news
 
 @app.get("/")
 def hello():
     return {"message":"its running"}
 
-@app.get('/news',status_code=200)
+@app.get('/get/news',status_code=200)
 def get_posts():
     f = open('news.json')
     data = json.load(f)
     return (data)
+@app.get('/get/pred',status_code=200)
+def getPredposts():
+    f = open('pred.json')
+    data = json.load(f)
+    return {"pred" : data["predictiveNews"]}
 
+@app.get('/get/jokes',status_code=200)
+def getPredposts():
+    f = open('pred.json')
+    data = json.load(f)
+    return {"jokes" : data["jokes"]}
 
-@app.post('/prob', status_code = status.HTTP_201_CREATED )
-def create_posts(new :  dict):
-    
-    return {
-        "probability" : str(prob(new))
-    }
+@app.get('/get/shortstories',status_code=200)
+def getStoriesposts():
+    f = open('pred.json')
+    data = json.load(f)
+    return {"stories" : data["shortStories"]}
+
+@app.get('/get/top100',status_code=200)
+def getTop100(): 
+    URL = "https://www.billboard.com/charts/hot-100/"
+    page = requests.get(URL)
+    soup = BeautifulSoup(page.content, "html.parser")
+    uls = soup.find_all("ul", "o-chart-results-list-row")
+    songs = []
+    for ul in uls:
+        songName = ul.find_all("h3")[0].text.strip()
+        artist = ul.find_all("span","u-max-width-330")[0].text.strip()
+        json={
+            "name":songName,
+            "artist":artist
+        }
+        songs.append(json)
+    return songs
