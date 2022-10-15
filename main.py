@@ -10,6 +10,7 @@ import requests
 import newspaper
 import json
 from crawler import newScrapper
+from crosswords import generator
 
 key = os.environ.get('API')
 
@@ -19,11 +20,14 @@ app = FastAPI()
 categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
 
 
-@app.get("/")
+@app.get("/get/news")
 def hello():
-    return {"message":"its running"}
+    with open('news.json') as json_file:
+        data = json.load(json_file)
+    
+    return data
 
-@app.get('/news/general',status_code=200)
+@app.get('get/news/general',status_code=200)
 def get_posts():
     try:
         f = open('news.json')
@@ -32,6 +36,12 @@ def get_posts():
         news.jsonDump()
     data = json.load(f)
     return (data)
+
+
+@app.get("/get/crossword")
+def getCrossword():
+    abc = generator()
+    return abc.getRequest()
 
 @app.get('/news/predictive', status_code=200)
 def get_posts():

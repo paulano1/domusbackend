@@ -1,4 +1,3 @@
-
 from time import sleep
 from turtle import update
 from unicodedata import category
