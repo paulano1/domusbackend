@@ -2,9 +2,7 @@ from click import prompt
 import requests
 from words import wordlist
 import random
-import os
-
-
+import json
 class Predictive():
     def __init__(self) -> None:
         self.__mood = ["Night", "Dusk", "Dawn", "Spring", "Fall", "Falling leaves", "Cloudless", "Midnight"]
@@ -17,7 +15,7 @@ class Predictive():
         return self.__words
     
     def getImages(self, text):
-        key = os.getenv(key='OPENAI')
+        key = "563492ad6f91700001000001636eabc8f29d4a39922b8f4a197f2b7d"
         header = {
             "Authorization": key
         }
@@ -62,7 +60,7 @@ class Predictive():
     
     def GPTrequest(self, prompt):
         url = "https://api.openai.com/v1/completions"
-        key = "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"
+        key = "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"
         headers = {
         # Already added when you pass json= but not when you pass data=
         # 'Content-Type': 'application/json',
@@ -84,6 +82,24 @@ class Predictive():
 
 
 
+def main():
+    jokes = []
+    predictiveNews = []
+    shortstories = []
+    abc = Predictive()
+    for i in range(4):
+        jokes.append(abc.getJokes()['jokes'])
+        predictiveNews.append(abc.getPredictiveNews()["futureNews"])
+        shortstories.append(abc.getShortStory())
+    res = {
+        "jokes" : jokes,
+        "predictiveNews": predictiveNews,
+        "shortStories" : shortstories
+    }
+    with open("pred.json", "w") as outfile:
 
-abc = predictive()
-print(abc.getJokes())
+            json.dump(res, outfile)
+
+
+    
+main()
