@@ -114,10 +114,6 @@ def getTop100():
         songs.append(json)
     return songs
 
-@app.get('/get/Jokes',status_code=200)
-def get_posts():
-    news = Predictive()
-    return (news.getJokes())
 
 
 @app.post('/prob', status_code = status.HTTP_201_CREATED )
