@@ -17,11 +17,15 @@ key = os.environ.get('API')
 app = FastAPI()
 
 
-categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
 
+categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
+def run():
+    news = newScrapper(categories=categories)
+    news.jsonDump()
 
 @app.get("/get/news")
 def hello():
+    run()
     with open('news.json') as json_file:
         data = json.load(json_file)
     
@@ -29,19 +33,22 @@ def hello():
 
 @app.get('get/news/general',status_code=200)
 def get_posts():
-    try:
+    '''try:
         f = open('news.json')
     except: 
-        news = newScrapper(categories=categories)
-        news.jsonDump()
+        
     data = json.load(f)
-    return (data)
+    return (data)'''
+    pass
 
-
+    
 @app.get("/get/crossword")
 def getCrossword():
-    abc = generator()
-    return abc.getRequest()
+    with open('legend.json') as json_file:
+        data = json.load(json_file)
+    
+    return data
+    
 
 @app.get('/news/predictive', status_code=200)
 def get_posts():
@@ -60,6 +67,6 @@ def get_posts():
 def create_posts(new :  dict):
     
     return {
-        "probability" : str(prob(new))
+        "probability" : "down"
     }
 

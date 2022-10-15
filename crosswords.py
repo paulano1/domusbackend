@@ -25,7 +25,7 @@ import json
 import random, re, time, string
 from copy import copy as duplicate
 from words import wordlist
- 
+from crawler import newScrapper
 # optional, speeds up by a factor of 4
 
  
@@ -373,14 +373,23 @@ class generator():
         word_list = abc.wordlistGenerator()
         a = Crossword(13, 13, '-', 5000, word_list)
         a.compute_crossword(2)
-        '''print (a.word_bank())
+        print (a.word_bank())
         print (a.solution())
         print (a.word_find())
         print (a.display())
         print (a.legend())
         print (len(a.current_word_list), 'out of', len(word_list))
         print (a.debug)
-        print(a.getData())'''
+        print(a.getData())
+        
+
+
+
+        categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
+
+        news = newScrapper(categories=categories)
+        news.getGeneralNews()
+        news.jsonDump()
         with open("legend.json", "w") as fp:
             json.dump(a.getData(),fp)
         return a.getData()

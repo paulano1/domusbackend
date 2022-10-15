@@ -1,3 +1,5 @@
+
+from ast import If
 from time import sleep
 from turtle import update
 from unicodedata import category
@@ -12,7 +14,7 @@ class newScrapper():
     def __init__(self, categories) -> None:
         self.__categories = categories
         self.__url = []
-        self.__key = "7a7c94979e8f4ad0a6d8c1848a7052e7"
+        self.__key = "98add815e391464f94bed65d6d98dea7"
         self.__responses = {
 
             "status": "ok",
@@ -30,8 +32,10 @@ class newScrapper():
         url_i.download()
         url_i.parse()
         return url_i.text
+    ##fix
     def parser(self, response):
-        return [response["articles"][0],response["articles"][1]]
+        #print(response)
+        return [response["articles"][0],response["articles"][1], response["articles"][2], response["articles"][3]]
 
     def titleStorer(self):
         pass
@@ -49,16 +53,16 @@ class newScrapper():
             except:
                 pass
             f = open("titles.json", "w")
-
+            if(url_i.summary != ""):
             #sleep(10)
-            temp = {
-                "source" : article["source"]["name"],
-                "url" : article["url"],
-                "img" : article["urlToImage"],
-                "time" : article["publishedAt"],
-                "summary": url_i.summary.replace("\n", "").replace("\u2019", "").replace("\u2020", "").replace("\u2014", "").replace("\u201c","").replace("\u201d", "").replace("\u2013","")
-            }
-            self.__data["articles"].append(temp)
+                temp = {
+                    "source" : article["source"]["name"],
+                    "url" : article["url"],
+                    "img" : article["urlToImage"],
+                    "time" : article["publishedAt"],
+                    "summary": url_i.summary.replace("\n", "").replace("\u2019", "").replace("\u2020", "").replace("\u2014", "").replace("\u201c","").replace("\u201d", "").replace("\u2013","")
+                }
+                self.__data["articles"].append(temp)
         
         f = open("titles.json", "w")
         
@@ -69,6 +73,7 @@ class newScrapper():
         
         for category in self.__categories:
             response = requests.get(link + category + rest + self.__key)
+            
             r = self.parser(response.json())
             self.__responses["articles"].append(r[0])
             self.__responses["articles"].append(r[1])
@@ -98,6 +103,11 @@ class shortstories():
 
 
 
+categories = ["Business","Cars","Entertainment","Family","Health","Politics","Religion","Science"]
+
+news = newScrapper(categories=categories)
+news.getGeneralNews()
+news.jsonDump()
     
 
 
