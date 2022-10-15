@@ -2,6 +2,8 @@ from click import prompt
 import requests
 from words import wordlist
 import random
+import os
+
 
 class Predictive():
     def __init__(self) -> None:
@@ -15,7 +17,7 @@ class Predictive():
         return self.__words
     
     def getImages(self, text):
-        key = "563492ad6f91700001000001636eabc8f29d4a39922b8f4a197f2b7d"
+        key = os.getenv(key='OPENAI')
         header = {
             "Authorization": key
         }
