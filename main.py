@@ -9,7 +9,7 @@ import math
 import requests
 import newspaper
 import json
-from crawler import wordlist
+from words import wordlist
 from bs4 import BeautifulSoup
 key = os.environ.get('API')
 
@@ -49,8 +49,8 @@ def getTop100():
         }
         songs.append(json)
     return songs
-'''@app.post('/post/properNouns', status_code = status.HTTP_201_CREATED )
+@app.post('/post/properNouns', status_code = status.HTTP_201_CREATED )
 def create_posts(new :  dict):
     abc  = wordlist()
-    return {"proper": abc.ProperNounExtractor(new['text'])}'''
+    return {"proper": abc.ProperNounExtractor(new['text'])}
     
